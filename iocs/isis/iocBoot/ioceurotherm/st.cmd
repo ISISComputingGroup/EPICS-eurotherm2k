@@ -9,7 +9,7 @@ epicsEnvSet "IOCNAME" "$(P=$(MYPVPREFIX))EUROTHERM"
 epicsEnvSet "IOCSTATS_DB" "$(DEVIOCSTATS)/db/iocAdminSoft.db"
 epicsEnvSet "STREAM_PROTOCOL_PATH" "$(TOP)/../../eurotherm2kApp/protocol"
 epicsEnvSet "TTY" "$(TTY=\\\\\\\\.\\\\COM19)"
-epicsEnvSet "SENS_DIR" "C:/EPICS/kvlb/Story 285"
+epicsEnvSet "SENS_DIR" "C:/InstrumentSettings/calib/sensors"
 
 cd ${TOP}
 

@@ -295,8 +295,13 @@ record(bo, "$(P):CAL:APPLY:RST")
 record(stringout, "$(P):CAL:SEL")
 {
     field(DTYP, "Soft Channel")
-	field(OUT, "$(P):TEMP.NSPE")
 	field(FLNK, "$(P):CAL:SEL:UPDATE.PROC")
+}
+
+record(scalcout, "$(P):CAL:SEL:FMT")
+{
+	field(INPA, "$(P):CAL:SEL:VAL")
+	field(CALC, "$P('%s.test',A)")
 }
 
 record(sseq, "$(P):CAL:SEL:UPDATE")
@@ -311,6 +316,15 @@ record(sseq, "$(P):CAL:SEL:UPDATE")
 	field(LNK4, "$(P):TEMP:LOWLIMIT.NSPE")
 	field(DOL5, "$(P):CAL:SEL")
 	field(LNK5, "$(P):TEMP:SP:CONV.NSPE")
+	field(DOL6, "1")
+	field(LNK6, "$(P):CAL:SEL:UPDATE:NOW.PROC")
+}
+
+record(dfanout, "$(P):CAL:SEL:UPDATE:NOW")
+{
+	field(VAL, "1")
+	field(OUTA, "$(P):CAL:APPLY.VAL")
+	field(OUTB, "$(P):CAL:APPLY.PROC")
 }
 
 
@@ -367,12 +381,6 @@ record(cvt, "$(P):TEMP:LOWLIMIT")
 	field(TDIR, "$(SDIR)")
 }
 
-record(ai, "$(P):TEMP:SP")
-{
-	field(FLNK, "$(P):TEMP:SP:CONV.PROC")
-	field(SIML, "$(P):SIM")
-    field(SIOL, "$(P):SIM:TEMP:SP")
-}
 
 record(cvt, "$(P):TEMP:SP:CONV")
 {
@@ -405,10 +413,17 @@ record(ai, "$(P):SP:RBV") {
     field(SDIS, "$(P):DISABLE")
 }
 
+record(ai, "$(P):TEMP:SP")
+{
+	field(FLNK, "$(P):TEMP:SP:CONV.PROC")
+}
+
 record(ao, "$(P):SP") {
     field(DESC, "Temperature Setpoint")
     field(DTYP, "stream")
     field(OUT, "@eurotherm2k.proto write($(GAD),$(LAD),SL,$(P)) $(PORT)")
+	field(SIML, "$(P):SIM")
+    field(SIOL, "$(P):SIM:TEMP:SP")
     field(SDIS, "$(P):DISABLE")
 }
 
