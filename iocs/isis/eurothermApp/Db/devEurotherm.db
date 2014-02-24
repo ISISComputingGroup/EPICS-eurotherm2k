@@ -16,55 +16,6 @@ record(bo, "$(P):DISABLE")
     field(ONAM, "COMMS DISABLED")
 }
 
-record(ai, "$(P):TEMPERATURE") {
-    field(SCAN, "1 second")
-    field(DESC, "Temperature Readback")
-    field(DTYP, "stream")
-    field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),PV) $(PORT)")
-    field(SIML, "$(P):SIM")
-    field(SIOL, "$(P):SIM:TEMPERATURE")
-    field(SDIS, "$(P):DISABLE")
-}
-
-record(ai, "$(P):TEMPERATURE:SP:RBV") {
-    field(SCAN, "1 second")
-    field(DESC, "Temperature Setpoint Readback")
-    field(DTYP, "stream")
-    field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),SP) $(PORT)")
-    field(SIML, "$(P):SIM")
-    field(SIOL, "$(P):SIM:TEMPERATURE:SP:RBV")
-    field(SDIS, "$(P):DISABLE")
-}
-
-record(ao, "$(P):TEMPERATURE:SP") {
-    field(DESC, "Temperature Setpoint")
-    field(DTYP, "stream")
-    field(OUT, "@eurotherm2k.proto write($(GAD),$(LAD),SP,$(P)) $(PORT)")
-    field(SIML, "$(P):SIM")
-    field(SIOL, "$(P):SIM:TEMPERATURE:SP")
-    field(SDIS, "$(P):DISABLE")
-}
-
-record(ai, "$(P):TEMPERATURE:HIGHLIMIT") {
-    field(SCAN, "1 second")
-    field(DESC, "Setpoint Highlimit Readback")
-    field(DTYP, "stream")
-    field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),HS) $(PORT)")
-    field(SIML, "$(P):SIM")
-    field(SIOL, "$(P):SIM:TEMPERATURE:HIGHLIMIT")
-    field(SDIS, "$(P):DISABLE")
-}
-
-record(ai, "$(P):TEMPERATURE:LOWLIMIT") {
-    field(SCAN, "1 second")
-    field(DESC, "Setpoint Lowlimit Readback")
-    field(DTYP, "stream")
-    field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),LS) $(PORT)")
-    field(SIML, "$(P):SIM")
-    field(SIOL, "$(P):SIM:TEMPERATURE:LOWLIMIT")
-    field(SDIS, "$(P):DISABLE")
-}
-
 record(ai, "$(P):OUTPUT") {
     field(SCAN, "1 second")
     field(DESC, "Output Readback")
@@ -226,7 +177,7 @@ alias("$(P):SIM:MAX_OUTPUT","$(P):SIM:MAX_OUTPUT:SP")
 
 alias("$(P):SIM:MAX_OUTPUT","$(P):SIM:MAX_OUTPUT:SP:RBV")
 
-record(ai, "$(P):SIM:TEMPERATURE:LOWLIMIT")
+record(ai, "$(P):SIM:TEMP:LOWLIMIT")
 {
     field(SCAN, "Passive")
     field(DTYP, "Soft Channel")
@@ -248,15 +199,15 @@ record(mbbi, "$(P):SIM:ERR")
     field(DTYP, "Soft Channel")
 }
 
-record(ai, "$(P):SIM:TEMPERATURE")
+record(ai, "$(P):SIM:TEMP")
 {
     field(SCAN, "Passive")
     field(DTYP, "Soft Channel")
 }
 
-alias("$(P):SIM:TEMPERATURE","$(P):SIM:TEMPERATURE:SP")
+alias("$(P):SIM:TEMP","$(P):SIM:TEMP:SP")
 
-alias("$(P):SIM:TEMPERATURE","$(P):SIM:TEMPERATURE:SP:RBV")
+alias("$(P):SIM:TEMP","$(P):SIM:TEMP:SP:RBV")
 
 record(ai, "$(P):SIM:I")
 {
@@ -300,9 +251,184 @@ record(ai, "$(P):SIM:OUTPUT")
     field(DTYP, "Soft Channel")
 }
 
-record(ai, "$(P):SIM:TEMPERATURE:HIGHLIMIT")
+record(ai, "$(P):SIM:TEMP:HIGHLIMIT")
 {
     field(SCAN, "Passive")
     field(DTYP, "Soft Channel")
 }
 
+# Additionts for story 285
+record(stringin, "$(P):CAL:SEL:RBV")
+{
+    field(DTYP, "Soft Channel")
+	field(INP, "$(P):TEMP.NSPE")
+	field(PINI, "YES")
+	field(SCAN, "1 second")
+}
+
+record(stringin, "$(P):CAL:RBV")
+{
+    field(DTYP, "Soft Channel")
+	field(INP, "$(P):TEMP.SPEC")
+	field(PINI, "YES")
+	field(SCAN, "1 second")
+}
+
+record(bi, "$(P):CAL:APPLY")
+{
+    field(DTYP, "Soft Channel")
+	field(ZNAM, "WAIT")
+    field(ONAM, "APPLY")
+	field(VAL, "0")
+	field(FLNK, "$(P):CAL:APPLY:UPDATE.PROC")
+}
+
+record(bo, "$(P):CAL:APPLY:RST")
+{
+    field(DTYP, "Soft Channel")
+	field(ZNAM, "STOP APPLY")
+    field(ONAM, "")
+	field(VAL, "0")
+	field(OUT, "$(P):CAL:APPLY")
+}
+
+record(stringout, "$(P):CAL:SEL")
+{
+    field(DTYP, "Soft Channel")
+	field(OUT, "$(P):TEMP.NSPE")
+	field(FLNK, "$(P):CAL:SEL:UPDATE.PROC")
+}
+
+record(sseq, "$(P):CAL:SEL:UPDATE")
+{
+	field(DOL1, "$(P):CAL:SEL.VAL")
+	field(LNK1, "$(P):TEMP.NSPE")
+	field(DOL2, "$(P):CAL:SEL")
+	field(LNK2, "$(P):TEMP:SP:RBV.NSPE")
+	field(DOL3, "$(P):CAL:SEL")
+	field(LNK3, "$(P):TEMP:HIGHLIMIT.NSPE")
+	field(DOL4, "$(P):CAL:SEL")
+	field(LNK4, "$(P):TEMP:LOWLIMIT.NSPE")
+	field(DOL5, "$(P):CAL:SEL")
+	field(LNK5, "$(P):TEMP:SP:CONV.NSPE")
+}
+
+
+record(seq, "$(P):CAL:APPLY:UPDATE")
+{
+	field(DOL1, "$(P):CAL:APPLY")
+	field(LNK1, "$(P):TEMP.INIT NPP")
+	field(DOL2, "$(P):CAL:APPLY")
+	field(LNK2, "$(P):TEMP:SP:RBV.INIT NPP")
+	field(DOL3, "$(P):CAL:APPLY")
+	field(LNK3, "$(P):TEMP:HIGHLIMIT.INIT NPP")
+	field(DOL4, "$(P):CAL:APPLY")
+	field(LNK4, "$(P):TEMP:LOWLIMIT.INIT NPP")
+	field(DOL5, "$(P):CAL:APPLY")
+	field(LNK5, "$(P):TEMP:SP:CONV.INIT NPP")
+	field(DOL6, "0")
+	field(DLY6, "2")
+	field(LNK6, "$(P):CAL:APPLY:RST.PROC")
+}
+
+record(cvt, "$(P):TEMP")
+{
+	field(SCAN, "1 second")
+	field(INPY, "$(P):RBV PP")
+	field(METH, "1D TABLE INVERTED")
+	field(SPEC, "None.txt")
+	field(TDIR, "$(SDIR)")
+}
+
+record(cvt, "$(P):TEMP:SP:RBV")
+{
+	field(SCAN, "1 second")
+	field(INPY, "$(P):SP:RBV PP")
+	field(METH, "1D TABLE INVERTED")
+	field(SPEC, "None.txt")
+	field(TDIR, "$(SDIR)")
+}
+
+record(cvt, "$(P):TEMP:HIGHLIMIT")
+{
+	field(SCAN, "1 second")
+	field(INPY, "$(P):HILIM PP")
+	field(METH, "1D TABLE INVERTED")
+	field(SPEC, "None.txt")
+	field(TDIR, "$(SDIR)")
+}
+
+record(cvt, "$(P):TEMP:LOWLIMIT")
+{
+	field(SCAN, "1 second")
+	field(INPY, "$(P):LOWLIM PP")
+	field(METH, "1D TABLE INVERTED")
+	field(SPEC, "None.txt")
+	field(TDIR, "$(SDIR)")
+}
+
+record(ai, "$(P):TEMP:SP")
+{
+	field(FLNK, "$(P):TEMP:SP:CONV.PROC")
+	field(SIML, "$(P):SIM")
+    field(SIOL, "$(P):SIM:TEMP:SP")
+}
+
+record(cvt, "$(P):TEMP:SP:CONV")
+{
+	field(OUT, "$(P):SP PP")
+	field(INPX, "$(P):TEMP:SP")
+	field(METH, "1D TABLE")
+	field(SPEC, "None.txt")
+	field(TDIR, "$(SDIR)")
+}
+# End Additions for story 285
+
+#Alterations for story 285
+record(ai, "$(P):RBV") {
+    field(SCAN, "1 second")
+    field(DESC, "Temperature Readback")
+    field(DTYP, "stream")
+    field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),PV) $(PORT)")
+    field(SIML, "$(P):SIM")
+    field(SIOL, "$(P):SIM:TEMP")
+    field(SDIS, "$(P):DISABLE")
+}
+
+record(ai, "$(P):SP:RBV") {
+    field(SCAN, "1 second")
+    field(DESC, "Temperature Setpoint Readback")
+    field(DTYP, "stream")
+    field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),SP) $(PORT)")
+    field(SIML, "$(P):SIM")
+    field(SIOL, "$(P):SIM:TEMP:SP:RBV")
+    field(SDIS, "$(P):DISABLE")
+}
+
+record(ao, "$(P):SP") {
+    field(DESC, "Temperature Setpoint")
+    field(DTYP, "stream")
+    field(OUT, "@eurotherm2k.proto write($(GAD),$(LAD),SL,$(P)) $(PORT)")
+    field(SDIS, "$(P):DISABLE")
+}
+
+record(ai, "$(P):HILIM") {
+    field(SCAN, "1 second")
+    field(DESC, "Setpoint Highlimit Readback")
+    field(DTYP, "stream")
+    field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),HS) $(PORT)")
+    field(SIML, "$(P):SIM")
+    field(SIOL, "$(P):SIM:TEMP:HIGHLIMIT")
+    field(SDIS, "$(P):DISABLE")
+}
+
+record(ai, "$(P):LOWLIM") {
+    field(SCAN, "1 second")
+    field(DESC, "Setpoint Lowlimit Readback")
+    field(DTYP, "stream")
+    field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),LS) $(PORT)")
+    field(SIML, "$(P):SIM")
+    field(SIOL, "$(P):SIM:TEMP:LOWLIMIT")
+    field(SDIS, "$(P):DISABLE")
+}
+#End Alterations for story 285

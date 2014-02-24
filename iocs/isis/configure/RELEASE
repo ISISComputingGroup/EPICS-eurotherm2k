@@ -27,6 +27,13 @@ STREAMDEVICE=$(SUPPORT)/StreamDevice
 DEVIOCSTATS=$(SUPPORT)/devIocStats/3-1-11
 PCRE=$(SUPPORT)/pcre
 ONCRPC=$(SUPPORT)/oncrpc/2
+#Story 285 Include CSM for conversion
+CSM=$(SUPPORT)/csm/4-2
+#Story 285 Include STD for sseq from synapps, and CALC as sseq moved location between version in use and later versions
+STD=$(SUPPORT)/std/R3_1
+CALC=$(SUPPORT)/calc/2-9
+#Story 285 - the addition of sseq seems to require this
+SNCSEQ=$(SUPPORT)/seq/2-1-11
 
 # EPICS_BASE usually appears last so other apps can override stuff:
 EPICS_BASE=C:/EPICS/base/3-14-12-2

@@ -9,6 +9,7 @@ epicsEnvSet "IOCNAME" "$(P=$(MYPVPREFIX))EUROTHERM"
 epicsEnvSet "IOCSTATS_DB" "$(DEVIOCSTATS)/db/iocAdminSoft.db"
 epicsEnvSet "STREAM_PROTOCOL_PATH" "$(TOP)/../../eurotherm2kApp/protocol"
 epicsEnvSet "TTY" "$(TTY=\\\\\\\\.\\\\COM19)"
+epicsEnvSet "SENS_DIR" "C:/EPICS/kvlb/Story 285"
 
 cd ${TOP}
 
@@ -27,8 +28,8 @@ asynSetOption("L0", -1, "stop", "1")
 ## LAD = Lesser Eurotherm address part
 ## For example: eurotherm address 1 => GAD = 0 and LAD = 1
 ## For example: eurotherm address 10 => GAD = 1 and LAD = 0
-dbLoadRecords("$(TOP)/db/devEurotherm.db","P=$(IOCNAME)1, GAD=0, LAD=1, PORT=L0")
-dbLoadRecords("$(TOP)/db/devEurotherm.db","P=$(IOCNAME)2, GAD=0, LAD=2, PORT=L0")
+dbLoadRecords("$(TOP)/db/devEurotherm.db","P=$(IOCNAME)1, GAD=0, LAD=1, PORT=L0, SDIR=$(SENS_DIR)")
+dbLoadRecords("$(TOP)/db/devEurotherm.db","P=$(IOCNAME)2, GAD=0, LAD=2, PORT=L0, SDIR=$(SENS_DIR)")
 #dbLoadRecords("$(IOCSTATS_DB)","IOC=$(IOCNAME)")
 
 cd ${TOP}/iocBoot/${IOC}
