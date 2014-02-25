@@ -23,13 +23,17 @@ asynSetOption("L0", -1, "bits", "7")
 asynSetOption("L0", -1, "parity", "even")
 asynSetOption("L0", -1, "stop", "1")
 
+## Load the sim and disable records
+## These are loaded separately to allow one SIM and DISABLE to be used for all eurotherms
+dbLoadRecords("$(TOP)/db/devSimDis.db","Q=$(IOCNAME)")
+
 ## Load record instances
 ## GAD = Greater Eurtotherm address part
 ## LAD = Lesser Eurotherm address part
 ## For example: eurotherm address 1 => GAD = 0 and LAD = 1
 ## For example: eurotherm address 10 => GAD = 1 and LAD = 0
-dbLoadRecords("$(TOP)/db/devEurotherm.db","P=$(IOCNAME)1, GAD=0, LAD=1, PORT=L0, SDIR=$(SENS_DIR)")
-dbLoadRecords("$(TOP)/db/devEurotherm.db","P=$(IOCNAME)2, GAD=0, LAD=2, PORT=L0, SDIR=$(SENS_DIR)")
+dbLoadRecords("$(TOP)/db/devEurotherm.db","P=$(IOCNAME)1, Q=$(IOCNAME), GAD=0, LAD=1, PORT=L0, SDIR=$(SENS_DIR)")
+dbLoadRecords("$(TOP)/db/devEurotherm.db","P=$(IOCNAME)2, Q=$(IOCNAME), GAD=0, LAD=2, PORT=L0, SDIR=$(SENS_DIR)")
 #dbLoadRecords("$(IOCSTATS_DB)","IOC=$(IOCNAME)")
 
 cd ${TOP}/iocBoot/${IOC}

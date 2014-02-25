@@ -1,28 +1,10 @@
-record(bo, "$(P):SIM")
-{
-    field(SCAN, "Passive")
-    field(DTYP, "Soft Channel")
-    field(ZNAM, "NO")
-    field(ONAM, "YES")
-}
-
-record(bo, "$(P):DISABLE") 
-{
-    field(DESC, "Disable comms")
-    field(PINI, "YES")
-    field(VAL, "0")
-    field(OMSL, "supervisory")
-    field(ZNAM, "COMMS ENABLED")
-    field(ONAM, "COMMS DISABLED")
-}
-
 record(ai, "$(P):OUTPUT") {
     field(SCAN, "1 second")
     field(DESC, "Output Readback")
     field(DTYP, "stream")
     field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),OP) $(PORT)")
     field(EGU, "%")
-    field(SIML, "$(P):SIM")
+    field(SIML, "$(Q):SIM")
     field(SIOL, "$(P):SIM:OUTPUT")
     field(SDIS, "$(P):DISABLE")
 }
@@ -33,7 +15,7 @@ record(ai, "$(P):MAX_OUTPUT") {
     field(DTYP, "stream")
     field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),HO) $(PORT)")
     field(EGU, "%")
-    field(SIML, "$(P):SIM")
+    field(SIML, "$(Q):SIM")
     field(SIOL, "$(P):SIM:MAX_OUTPUT")
     field(SDIS, "$(P):DISABLE")
 }
@@ -44,7 +26,7 @@ record(ao, "$(P):MAX_OUTPUT:SP") {
     field(OUT, "@eurotherm2k.proto write($(GAD),$(LAD),HO,$(P)) $(PORT)")
     field(DRVH, "100")
     field(DRVL, "0")
-    field(SIML, "$(P):SIM")
+    field(SIML, "$(Q):SIM")
     field(SIOL, "$(P):SIM:MAX_OUTPUT:SP")
     field(SDIS, "$(P):DISABLE")
 }
@@ -66,7 +48,7 @@ record(mbbi, "$(P):ERR") {
     field(FRVL, "8")
     field(FRST, "Limit Error")
     field(PINI, "YES")
-    field(SIML, "$(P):SIM")
+    field(SIML, "$(Q):SIM")
     field(SIOL, "$(P):SIM:ERR")
     field(SDIS, "$(P):DISABLE")
 }
@@ -76,7 +58,7 @@ record(ai, "$(P):P") {
     field(DESC, "P Param Readback")
     field(DTYP, "stream")
     field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),XP) $(PORT)")
-    field(SIML, "$(P):SIM")
+    field(SIML, "$(Q):SIM")
     field(SIOL, "$(P):SIM:P")
     field(SDIS, "$(P):DISABLE")
 }
@@ -85,7 +67,7 @@ record(ao, "$(P):P:SP") {
     field(DESC, "P Setpoint")
     field(DTYP, "stream")
     field(OUT, "@eurotherm2k.proto write($(GAD),$(LAD),XP,$(P)) $(PORT)")
-    field(SIML, "$(P):SIM")
+    field(SIML, "$(Q):SIM")
     field(SIOL, "$(P):SIM:P:SP")
     field(SDIS, "$(P):DISABLE")
 }
@@ -97,7 +79,7 @@ record(ai, "$(P):I") {
     field(DESC, "I Param Readback")
     field(DTYP, "stream")
     field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),TI) $(PORT)")
-    field(SIML, "$(P):SIM")
+    field(SIML, "$(Q):SIM")
     field(SIOL, "$(P):SIM:I")
     field(SDIS, "$(P):DISABLE")
 }
@@ -106,7 +88,7 @@ record(ao, "$(P):I:SP") {
     field(DESC, "I Setpoint")
     field(DTYP, "stream")
     field(OUT, "@eurotherm2k.proto write($(GAD),$(LAD),TI,$(P)) $(PORT)")
-    field(SIML, "$(P):SIM")
+    field(SIML, "$(Q):SIM")
     field(SIOL, "$(P):SIM:I:SP")
     field(SDIS, "$(P):DISABLE")
 }
@@ -118,7 +100,7 @@ record(ai, "$(P):D") {
     field(DESC, "D Param Readback")
     field(DTYP, "stream")
     field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),TD) $(PORT)")
-    field(SIML, "$(P):SIM")
+    field(SIML, "$(Q):SIM")
     field(SIOL, "$(P):SIM:D")
     field(SDIS, "$(P):DISABLE")
 }
@@ -127,7 +109,7 @@ record(ao, "$(P):D:SP") {
     field(DESC, "D Setpoint")
     field(DTYP, "stream")
     field(OUT, "@eurotherm2k.proto write($(GAD),$(LAD),TD,$(P)) $(PORT)")
-    field(SIML, "$(P):SIM")
+    field(SIML, "$(Q):SIM")
     field(SIOL, "$(P):SIM:D:SP")
     field(SDIS, "$(P):DISABLE")
 }
@@ -139,7 +121,7 @@ record(ai, "$(P):AUTOTUNE") {
     field(DESC, "Autotune Readback")
     field(DTYP, "stream")
     field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),AT) $(PORT)")
-    field(SIML, "$(P):SIM")
+    field(SIML, "$(Q):SIM")
     field(SIOL, "$(P):SIM:AUTOTUNE")
     field(SDIS, "$(P):DISABLE")
 }
@@ -148,7 +130,7 @@ record(ao, "$(P):AUTOTUNE:SP") {
     field(DESC, "D Setpoint")
     field(DTYP, "stream")
     field(OUT, "@eurotherm2k.proto write($(GAD),$(LAD),AT,$(P)) $(PORT)")
-    field(SIML, "$(P):SIM")
+    field(SIML, "$(Q):SIM")
     field(SIOL, "$(P):SIM:AUTOTUNE:SP")
     field(SDIS, "$(P):DISABLE")
 }
@@ -160,7 +142,7 @@ record(ai, "$(P):SENSOR") {
     field(DESC, "Sensor Readback")
     field(DTYP, "stream")
     field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),PV) $(PORT)")
-    field(SIML, "$(P):SIM")
+    field(SIML, "$(Q):SIM")
     field(SIOL, "$(P):SIM:SENSOR")
     field(SDIS, "$(P):DISABLE")
 }
@@ -398,7 +380,7 @@ record(ai, "$(P):RBV") {
     field(DESC, "Temperature Readback")
     field(DTYP, "stream")
     field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),PV) $(PORT)")
-    field(SIML, "$(P):SIM")
+    field(SIML, "$(Q):SIM")
     field(SIOL, "$(P):SIM:TEMP")
     field(SDIS, "$(P):DISABLE")
 }
@@ -408,7 +390,7 @@ record(ai, "$(P):SP:RBV") {
     field(DESC, "Temperature Setpoint Readback")
     field(DTYP, "stream")
     field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),SP) $(PORT)")
-    field(SIML, "$(P):SIM")
+    field(SIML, "$(Q):SIM")
     field(SIOL, "$(P):SIM:TEMP:SP:RBV")
     field(SDIS, "$(P):DISABLE")
 }
@@ -422,7 +404,7 @@ record(ao, "$(P):SP") {
     field(DESC, "Temperature Setpoint")
     field(DTYP, "stream")
     field(OUT, "@eurotherm2k.proto write($(GAD),$(LAD),SL,$(P)) $(PORT)")
-	field(SIML, "$(P):SIM")
+	field(SIML, "$(Q):SIM")
     field(SIOL, "$(P):SIM:TEMP:SP")
     field(SDIS, "$(P):DISABLE")
 }
@@ -432,7 +414,7 @@ record(ai, "$(P):HILIM") {
     field(DESC, "Setpoint Highlimit Readback")
     field(DTYP, "stream")
     field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),HS) $(PORT)")
-    field(SIML, "$(P):SIM")
+    field(SIML, "$(Q):SIM")
     field(SIOL, "$(P):SIM:TEMP:HIGHLIMIT")
     field(SDIS, "$(P):DISABLE")
 }
@@ -442,7 +424,7 @@ record(ai, "$(P):LOWLIM") {
     field(DESC, "Setpoint Lowlimit Readback")
     field(DTYP, "stream")
     field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),LS) $(PORT)")
-    field(SIML, "$(P):SIM")
+    field(SIML, "$(Q):SIM")
     field(SIOL, "$(P):SIM:TEMP:LOWLIMIT")
     field(SDIS, "$(P):DISABLE")
 }
