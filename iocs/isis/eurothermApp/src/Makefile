@@ -24,7 +24,7 @@ eurotherm_DBD += cvtRecord.dbd
 eurotherm_DBD += sseqRecord.dbd
 eurotherm_DBD += calcSupport.dbd
 
-eurotherm_LIBS += stream pcre cvtRecord std calc
+eurotherm_LIBS += stream pcre cvtRecord csmbase std calc sscan
 eurotherm_LIBS += asyn devIocStats 
 
 # eurotherm_registerRecordDeviceDriver.cpp derives from eurotherm.dbd
