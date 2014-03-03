@@ -1,4 +1,4 @@
-record(bo, "$(Q):SIM")
+record(bo, "$(Q)SIM")
 {
     field(SCAN, "Passive")
     field(DTYP, "Soft Channel")
@@ -6,7 +6,7 @@ record(bo, "$(Q):SIM")
     field(ONAM, "YES")
 }
 
-record(bo, "$(Q):DISABLE") 
+record(bo, "$(Q)DISABLE") 
 {
     field(DESC, "Disable comms")
     field(PINI, "YES")
