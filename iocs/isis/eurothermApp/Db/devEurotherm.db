@@ -1,4 +1,5 @@
 record(ai, "$(P)OUTPUT") {
+    info(INTEREST, "MEDIUM")
     field(SCAN, "1 second")
     field(DESC, "Output Readback")
     field(DTYP, "stream")
