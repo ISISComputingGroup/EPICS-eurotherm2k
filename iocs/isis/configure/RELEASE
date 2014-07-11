@@ -36,6 +36,10 @@ CALC=$(SUPPORT)/calc/2-9
 SNCSEQ=$(SUPPORT)/seq/2-1-11
 #Story 285 - the addition of scalcout seems to require this
 SSCAN = $(SUPPORT)/sscan/2-8
+PVDUMP=$(SUPPORT)/pvdump
+SQLITE=$(SUPPORT)/sqlite
+UTILITIES=$(SUPPORT)/utilities
+ZLIB=$(SUPPORT)/zlib/1-2-8
 
 # EPICS_BASE usually appears last so other apps can override stuff:
 EPICS_BASE=C:/EPICS/base/3-14-12-2
