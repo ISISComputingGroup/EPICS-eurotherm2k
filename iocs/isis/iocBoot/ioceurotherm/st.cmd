@@ -6,7 +6,6 @@
 < envPaths
 
 epicsEnvSet "IOCNAME" "EUROTHERM"
-epicsEnvSet "IOCSTATS_DB" "$(DEVIOCSTATS)/db/iocAdminSoft.db"
 epicsEnvSet "STREAM_PROTOCOL_PATH" "$(TOP)/../../eurotherm2kApp/protocol"
 epicsEnvSet "TTY" "$(TTY=\\\\\\\\.\\\\COM19)"
 epicsEnvSet "SENS_DIR" "C:/InstrumentSettings/calib/sensors"
@@ -17,11 +16,15 @@ cd ${TOP}
 dbLoadDatabase "dbd/eurotherm.dbd"
 eurotherm_registerRecordDeviceDriver pdbbase
 
-#drvAsynSerialPortConfigure("L0", "$(TTY)", 0, 0, 0, 0)
-#asynSetOption("L0", -1, "baud", "9600")
-#asynSetOption("L0", -1, "bits", "7")
-#asynSetOption("L0", -1, "parity", "even")
-#asynSetOption("L0", -1, "stop", "1")
+< $(IOCSTARTUP)/init.cmd
+
+drvAsynSerialPortConfigure("L0", "$(TTY)", 0, 0, 0, 0)
+asynSetOption("L0", -1, "baud", "9600")
+asynSetOption("L0", -1, "bits", "7")
+asynSetOption("L0", -1, "parity", "even")
+asynSetOption("L0", -1, "stop", "1")
+
+< $(IOCSTARTUP)/dbload.cmd
 
 ## Load the sim and disable records
 ## These are loaded separately to allow one SIM and DISABLE to be used for ALL eurotherms
@@ -34,10 +37,11 @@ dbLoadRecords("$(TOP)/db/devSimDis.db","Q=$(MYPVPREFIX)EUROTHERM:")
 ## For example: eurotherm address 10 => GAD = 1 and LAD = 0
 dbLoadRecords("$(TOP)/db/devEurotherm.db","P=$(MYPVPREFIX)EUROTHERM1:, Q=$(MYPVPREFIX)EUROTHERM:, GAD=0, LAD=1, PORT=L0, SDIR=$(SENS_DIR)")
 dbLoadRecords("$(TOP)/db/devEurotherm.db","P=$(MYPVPREFIX)EUROTHERM2:, Q=$(MYPVPREFIX)EUROTHERM:, GAD=0, LAD=2, PORT=L0, SDIR=$(SENS_DIR)")
-dbLoadRecords("$(IOCSTATS_DB)","IOC=$(IOCNAME)")
 
-pvdump()
+< $(IOCSTARTUP)/preiocinit.cmd
 
 cd ${TOP}/iocBoot/${IOC}
 iocInit
+
+< $(IOCSTARTUP)/postiocinit.cmd
 
