@@ -13,6 +13,7 @@ example_DBD += asyn.dbd
 example_DBD += drvAsynIPPort.dbd
 example_DBD += drvAsynSerialPort.dbd
 example_DBD += stream.dbd
+#example_DBD += bptFreddie.dbd
 example_SRCS += example_registerRecordDeviceDriver.cpp
 example_LIBS += stream
 example_LIBS += pcre
@@ -20,5 +21,6 @@ example_LIBS += asyn
 example_LIBS += $(EPICS_BASE_IOC_LIBS)
 example_SRCS += exampleMain.cpp
 
+# alternative add bpt to DBD += and then use dbLoadRecords()
 include $(TOP)/configure/RULES
 
