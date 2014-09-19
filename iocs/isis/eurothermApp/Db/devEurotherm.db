@@ -240,6 +240,7 @@ record(seq, "$(P)CAL:APPLY:UPDATE")
 
 record(cvt, "$(P)TEMP")
 {
+    field(DESC, "Temperature")
     info(INTEREST, "HIGH")
 	field(SCAN, "1 second")
 	field(INPY, "$(P)RBV PP")
