@@ -45,7 +45,7 @@ readhex { InTerminator = "\x03"; out "\x04\$1\$1\$2\$2\$3\x05"; in "\x02\$3>%x";
 ## - $3 = command mnemonic
 ## - $4 = device prefix, \$(P)\$(Q)
 #############################################################################
-write {  InTerminator = ""; out "\x04\$1\$1\$2\$2\x02\$3%f\x03%6<xor>"; in "\x06"; @init{ read; }; @mismatch{ in "%(\$4:ERR.PROC)r"; }; }
+write {  InTerminator = ""; out "\x04\$1\$1\$2\$2\x02\$3%f\x03%6<xor>"; in "\x06"; @init{ read; }; @mismatch{ in "%(\$4ERR.PROC)r"; }; }
 
 ## Write a value in int rather than float
-writeint {  InTerminator = ""; out "\x04\$1\$1\$2\$2\x02\$3%i\x03%6<xor>"; in "\x06"; @init{ read; }; @mismatch{ in "%(\$4:ERR.PROC)r"; }; }
+writeint {  InTerminator = ""; out "\x04\$1\$1\$2\$2\x02\$3%i\x03%6<xor>"; in "\x06"; @init{ read; }; @mismatch{ in "%(\$4ERR.PROC)r"; }; }
