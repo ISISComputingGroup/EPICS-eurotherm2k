@@ -7,7 +7,7 @@ record(ai, "$(P)OUTPUT") {
     field(EGU, "%")
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:OUTPUT")
-    field(SDIS, "$(P)DISABLE")
+    field(SDIS, "$(Q)DISABLE")
 }
 
 record(ai, "$(P)MAX_OUTPUT") {
@@ -18,7 +18,7 @@ record(ai, "$(P)MAX_OUTPUT") {
     field(EGU, "%")
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:MAX_OUTPUT")
-    field(SDIS, "$(P)DISABLE")
+    field(SDIS, "$(Q)DISABLE")
 }
 
 record(ao, "$(P)MAX_OUTPUT:SP") {
@@ -29,7 +29,7 @@ record(ao, "$(P)MAX_OUTPUT:SP") {
     field(DRVL, "0")
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:MAX_OUTPUT:SP")
-    field(SDIS, "$(P)DISABLE")
+    field(SDIS, "$(Q)DISABLE")
 }
 
 alias("$(P)MAX_OUTPUT", "$(P)MAX_OUTPUT:SP:RBV")
@@ -51,7 +51,7 @@ record(mbbi, "$(P)ERR") {
     field(PINI, "YES")
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:ERR")
-    field(SDIS, "$(P)DISABLE")
+    field(SDIS, "$(Q)DISABLE")
 }
 
 record(ai, "$(P)P") {
@@ -62,7 +62,7 @@ record(ai, "$(P)P") {
     field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),XP) $(PORT)")
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:P")
-    field(SDIS, "$(P)DISABLE")
+    field(SDIS, "$(Q)DISABLE")
 }
 
 record(ao, "$(P)P:SP") {
@@ -71,7 +71,7 @@ record(ao, "$(P)P:SP") {
     field(OUT, "@eurotherm2k.proto write($(GAD),$(LAD),XP,$(P)) $(PORT)")
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:P:SP")
-    field(SDIS, "$(P)DISABLE")
+    field(SDIS, "$(Q)DISABLE")
 }
 
 alias("$(P)P", "$(P)P:SP:RBV")
@@ -84,7 +84,7 @@ record(ai, "$(P)I") {
     field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),TI) $(PORT)")
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:I")
-    field(SDIS, "$(P)DISABLE")
+    field(SDIS, "$(Q)DISABLE")
 }
 
 record(ao, "$(P)I:SP") {
@@ -93,7 +93,7 @@ record(ao, "$(P)I:SP") {
     field(OUT, "@eurotherm2k.proto write($(GAD),$(LAD),TI,$(P)) $(PORT)")
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:I:SP")
-    field(SDIS, "$(P)DISABLE")
+    field(SDIS, "$(Q)DISABLE")
 }
 
 alias("$(P)I", "$(P)I:SP:RBV")
@@ -106,7 +106,7 @@ record(ai, "$(P)D") {
     field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),TD) $(PORT)")
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:D")
-    field(SDIS, "$(P)DISABLE")
+    field(SDIS, "$(Q)DISABLE")
 }
 
 record(ao, "$(P)D:SP") {
@@ -115,7 +115,7 @@ record(ao, "$(P)D:SP") {
     field(OUT, "@eurotherm2k.proto write($(GAD),$(LAD),TD,$(P)) $(PORT)")
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:D:SP")
-    field(SDIS, "$(P)DISABLE")
+    field(SDIS, "$(Q)DISABLE")
 }
 
 alias("$(P)D", "$(P)D:SP:RBV")
@@ -127,7 +127,7 @@ record(ai, "$(P)AUTOTUNE") {
     field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),AT) $(PORT)")
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:AUTOTUNE")
-    field(SDIS, "$(P)DISABLE")
+    field(SDIS, "$(Q)DISABLE")
 }
 
 record(ao, "$(P)AUTOTUNE:SP") {
@@ -136,7 +136,7 @@ record(ao, "$(P)AUTOTUNE:SP") {
     field(OUT, "@eurotherm2k.proto write($(GAD),$(LAD),AT,$(P)) $(PORT)")
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:AUTOTUNE:SP")
-    field(SDIS, "$(P)DISABLE")
+    field(SDIS, "$(Q)DISABLE")
 }
 
 alias("$(P)AUTOTUNE", "$(P)AUTOTUNE:SP:RBV")
@@ -149,7 +149,7 @@ record(ai, "$(P)SENSOR") {
     field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),PV) $(PORT)")
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:SENSOR")
-    field(SDIS, "$(P)DISABLE")
+    field(SDIS, "$(Q)DISABLE")
 }
 
 record(stringin, "$(P)CAL:SEL:RBV")
@@ -293,7 +293,7 @@ record(ai, "$(P)RBV") {
     field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),PV) $(PORT)")
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:TEMP")
-    field(SDIS, "$(P)DISABLE")
+    field(SDIS, "$(Q)DISABLE")
 }
 
 record(ai, "$(P)SP:RBV") {
@@ -304,7 +304,7 @@ record(ai, "$(P)SP:RBV") {
     field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),SP) $(PORT)")
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:TEMP:SP:RBV")
-    field(SDIS, "$(P)DISABLE")
+    field(SDIS, "$(Q)DISABLE")
 }
 
 record(ai, "$(P)TEMP:SP")
@@ -319,7 +319,7 @@ record(ao, "$(P)SP") {
     field(OUT, "@eurotherm2k.proto write($(GAD),$(LAD),SL,$(P)) $(PORT)")
 	field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:TEMP:SP")
-    field(SDIS, "$(P)DISABLE")
+    field(SDIS, "$(Q)DISABLE")
 }
 
 record(ai, "$(P)HILIM") {
@@ -329,7 +329,7 @@ record(ai, "$(P)HILIM") {
     field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),HS) $(PORT)")
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:TEMP:HIGHLIMIT")
-    field(SDIS, "$(P)DISABLE")
+    field(SDIS, "$(Q)DISABLE")
 }
 
 record(ai, "$(P)LOWLIM") {
@@ -339,7 +339,7 @@ record(ai, "$(P)LOWLIM") {
     field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),LS) $(PORT)")
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:TEMP:LOWLIMIT")
-    field(SDIS, "$(P)DISABLE")
+    field(SDIS, "$(Q)DISABLE")
 }
 
 ### SIMULATION RECORDS ###
