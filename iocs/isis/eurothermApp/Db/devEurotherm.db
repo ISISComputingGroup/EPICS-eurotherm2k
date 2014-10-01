@@ -326,6 +326,7 @@ record(ao, "$(P)SP") {
 	field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:TEMP:SP")
     field(SDIS, "$(Q)DISABLE")
+	field(EGU, "")
 }
 
 record(ai, "$(P)HILIM") {
