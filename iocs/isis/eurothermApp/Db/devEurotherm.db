@@ -63,6 +63,7 @@ record(ai, "$(P)P") {
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:P")
     field(SDIS, "$(Q)DISABLE")
+	field(EGU, "")
 }
 
 record(ao, "$(P)P:SP") {
@@ -85,6 +86,7 @@ record(ai, "$(P)I") {
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:I")
     field(SDIS, "$(Q)DISABLE")
+	field(EGU, "")
 }
 
 record(ao, "$(P)I:SP") {
@@ -107,6 +109,7 @@ record(ai, "$(P)D") {
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:D")
     field(SDIS, "$(Q)DISABLE")
+	field(EGU, "")
 }
 
 record(ao, "$(P)D:SP") {
@@ -150,6 +153,7 @@ record(ai, "$(P)SENSOR") {
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:SENSOR")
     field(SDIS, "$(Q)DISABLE")
+	field(EGU, "")
 }
 
 record(stringin, "$(P)CAL:SEL:RBV")
@@ -294,6 +298,7 @@ record(ai, "$(P)RBV") {
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:TEMP")
     field(SDIS, "$(Q)DISABLE")
+	field(EGU, "")
 }
 
 record(ai, "$(P)SP:RBV") {
@@ -305,6 +310,7 @@ record(ai, "$(P)SP:RBV") {
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:TEMP:SP:RBV")
     field(SDIS, "$(Q)DISABLE")
+	field(EGU, "")
 }
 
 record(ai, "$(P)TEMP:SP")
