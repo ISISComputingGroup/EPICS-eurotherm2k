@@ -23,9 +23,11 @@ eurotherm_DBD += devIocStats.dbd
 eurotherm_DBD += cvtRecord.dbd
 eurotherm_DBD += sseqRecord.dbd
 eurotherm_DBD += calcSupport.dbd
-eurotherm_DBD += pvdump.dbd 
+eurotherm_DBD += pvdump.dbd
+eurotherm_DBD += ReadASCII.dbd
 
-eurotherm_LIBS += stream pcre cvtRecord csmbase std calc sscan
+
+eurotherm_LIBS += stream pcre cvtRecord csmbase std calc sscan ReadASCII
 eurotherm_LIBS += asyn devIocStats pvdump easySQLite sqlite utilities icpconfig
 
 # eurotherm_registerRecordDeviceDriver.cpp derives from eurotherm.dbd

@@ -1,3 +1,171 @@
+#ReadASCII
+###################
+record(stringout, "$(P)DIRBASE")
+{
+   field(DTYP, "asynOctetWrite")
+   field(VAL, "$(SDIR)")
+   field(OUT, "@asyn($(READ),0,1)DIRBASE")
+   field(PINI, "1")
+}
+
+record(stringout, "$(P)DIR:SP")
+{
+   field(DTYP, "asynOctetWrite")
+   field(OUT,  "@asyn($(READ),0,1)DIR")
+   field(OMSL, "supervisory")
+}
+
+record(ao, "$(P)TEMP:SP")
+{
+   field(DESC, "The temperature setpoint")
+   field(DTYP, "asynFloat64")
+   field(OUT, "@asyn($(READ),0,1)TGT")
+   field(EGU, "K")
+}
+
+record(ao, "$(P)RATE:SP")
+{
+   field(DESC, "Gives the rate at which the ramp increases/decreases")
+   field(DTYP, "asynFloat64")
+   field(OUT, "@asyn($(READ),0,1)RATE")
+   field(EGU, "K/s")
+}
+
+record(bi, "$(P)RAMPING")
+{
+   field(DESC, "High if ramp is executing")
+   field(DTYP, "asynInt32")
+   field(INP,  "@asyn($(READ),0,1)CURRMP")
+   field(SCAN, "I/O Intr")   
+}
+
+record(ao, "$(P)CURRENT_TEMP")
+{
+    field(DESC, "The current temperature of the sensor")
+	field(DOL, "$(P)TEMP")
+	field(OMSL, "closed_loop")
+	field(DTYP, "asynFloat64")
+	field(OUT, "@asyn($(READ),0,1)CUR")
+	field(EGU, "K")
+}
+
+record(bo, "$(P)RAMPON")
+{
+   field(DESC, "Toggles the SP ramp")
+   field(DTYP, "asynInt32")
+   field(OUT,  "@asyn($(READ),0,1)RMP")
+}
+
+record(bo, "$(P)LUTON")
+{
+   field(DESC, "Toggles the PID lookup")
+   field(DTYP, "asynInt32")
+   field(OUT,  "@asyn($(READ),0,1)LUT")
+}
+
+record(ai, "$(P)OUT_SP")
+{
+   field(DTYP, "asynFloat64")
+   field(INP,  "@asyn($(READ),0,1)SP")
+   field(PREC, "5")
+   field(SCAN, "I/O Intr")
+   field(FLNK, "$(P)RAMP_SP")
+}
+
+record(ai, "$(P)OUT_P")
+{
+   field(DTYP, "asynFloat64")
+   field(INP,  "@asyn($(READ),0,1)P")
+   field(PREC, "5")
+   field(SCAN, "I/O Intr")
+   field(FLNK, "$(P)RAMP_P")
+}
+
+record(ai, "$(P)OUT_I")
+{
+   field(DTYP, "asynFloat64")
+   field(INP,  "@asyn($(READ),0,1)I")
+   field(PREC, "5")
+   field(SCAN, "I/O Intr")
+   field(FLNK, "$(P)RAMP_I")
+}
+
+record(ai, "$(P)OUT_D")
+{
+   field(DTYP, "asynFloat64")
+   field(INP,  "@asyn($(READ),0,1)D")
+   field(PREC, "5")
+   field(SCAN, "I/O Intr")
+   field(FLNK, "$(P)RAMP_D")
+}
+
+record(ai, "$(P)OUT_MAX")
+{
+   field(DTYP, "asynFloat64")
+   field(INP,  "@asyn($(READ),0,1)MH")
+   field(PREC, "5")
+   field(SCAN, "I/O Intr")
+   field(FLNK, "$(P)RAMP_MAXOUT")
+  }
+
+###########
+
+#Pass on PID ramp
+record(ao, "$(P)RAMP_SP")
+{
+    field(DTYP, "Soft Channel")
+	field(DOL, "$(P)OUT_SP")
+	field(OMSL, "closed_loop")
+	field(OIF, "Full")
+	field(FLNK, "$(P)TEMP:SP:CONV.PROC")
+}
+
+record(ao, "$(P)RAMP_P")
+{
+    field(DTYP, "Soft Channel")
+	field(DOL, "$(P)OUT_P")
+	field(OMSL, "closed_loop")
+	field(OIF, "Full")
+	field(OUT, "$(P)P:SP PP")
+	field(DRVH, "100")
+	field(DRVL, "0")
+}
+
+record(ao, "$(P)RAMP_I")
+{
+    field(DTYP, "Soft Channel")
+	field(DOL, "$(P)OUT_I")
+	field(OMSL, "closed_loop")
+	field(OIF, "Full")
+	field(OUT, "$(P)I:SP PP")
+	field(DRVH, "100")
+	field(DRVL, "0")
+}
+
+record(ao, "$(P)RAMP_D")
+{
+    field(DTYP, "Soft Channel")
+	field(DOL, "$(P)OUT_D")
+	field(OMSL, "closed_loop")
+	field(OIF, "Full")
+	field(OUT, "$(P)D:SP PP")
+	field(DRVH, "100")
+	field(DRVL, "0")
+}
+
+record(ao, "$(P)RAMP_MAXOUT")
+{
+    field(DTYP, "Soft Channel")
+	field(DOL, "$(P)OUT_MAX")
+	field(OMSL, "closed_loop")
+	field(OIF, "Full")
+	field(OUT, "$(P)MAX_OUTPUT:SP PP")
+	field(DRVH, "100")
+	field(DRVL, "0")
+}
+
+##################
+
 record(ai, "$(P)OUTPUT") {
     info(INTEREST, "MEDIUM")
     field(SCAN, "1 second")
@@ -251,6 +419,7 @@ record(cvt, "$(P)TEMP")
 	field(METH, "1D TABLE INVERTED")
 	field(SPEC, "None.txt")
 	field(TDIR, "$(SDIR)")
+	field(FLNK, "$(P)CURRENT_TEMP PP")
 }
 
 record(cvt, "$(P)TEMP:SP:RBV")
@@ -283,7 +452,7 @@ record(cvt, "$(P)TEMP:LOWLIMIT")
 record(cvt, "$(P)TEMP:SP:CONV")
 {
 	field(OUT, "$(P)SP PP")
-	field(INPX, "$(P)TEMP:SP")
+	field(INPX, "$(P)RAMP_SP")
 	field(METH, "1D TABLE")
 	field(SPEC, "None.txt")
 	field(TDIR, "$(SDIR)")
@@ -311,11 +480,6 @@ record(ai, "$(P)SP:RBV") {
     field(SIOL, "$(P)SIM:TEMP:SP:RBV")
     field(SDIS, "$(Q)DISABLE")
 	field(EGU, "")
-}
-
-record(ai, "$(P)TEMP:SP")
-{
-	field(FLNK, "$(P)TEMP:SP:CONV.PROC")
 }
 
 record(ao, "$(P)SP") {
