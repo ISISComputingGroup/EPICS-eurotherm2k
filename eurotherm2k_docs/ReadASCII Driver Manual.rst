@@ -8,7 +8,12 @@ The purpose of this driver is to linearly ramp output values whilst simultaneous
 The Driver PVs
 --------------
 
-The ramp and lookup are controlled through the RAMPON and LUTON PVs respectively. These are independent controls and so enable 4 different modes.
+The ramp and lookup are controlled through the RAMPON and LUTON PVs respectively. These are independent controls and so enable 4 different modes:
+
+#. Ramp Off, Lookup Off: Normal operation, the user sets values manually and they are immediately set
+#. Ramp Off, Lookup On: User sets set point values manually, PID values are automatically changed accordingly. PID values can also be set manually
+#. Ramp On, Lookup Off: The set point is ramped towards the value set by the user. PID values do not changed automatically.
+#. Ramp On, Lookup On: The set point is ramped towards the value set by the user. PID values automatically change accordingly.
 
 Prior to using the lookup table the file directory must be set. This consists of a 'base' directory, which should be set at start up through the st.cmd, and a target directory to swap between files within the base folder. The base folder is currently set to "C:\InstrumentSettings".
 
