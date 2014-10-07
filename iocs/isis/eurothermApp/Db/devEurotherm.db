@@ -28,6 +28,7 @@ record(ao, "$(P)TEMP:SP")
    field(DTYP, "asynFloat64")
    field(OUT, "@asyn($(READ),0,1)TGT")
    field(EGU, "K")
+   field(FLNK, "$(P)TEMP:SP:RBV")
 }
 
 record(ao, "$(P)RATE:SP")
@@ -198,10 +199,36 @@ record(ao, "$(P)RAMP_MAXOUT")
 
 ##################
 
+#Fanout reads so that they can be interrupted
+
+record(fanout, "$(P)READ") {
+	field(SCAN, "5 second")
+	field(LNK1, "$(P)P PP")
+	field(LNK2, "$(P)I PP")
+	field(LNK3, "$(P)D PP")
+	field(LNK4, "$(P)OUTPUT PP")	
+	field(LNK5, "$(P)MAX_OUTPUT PP")
+	field(LNK6, "$(P)READ1 PP")
+	field(SELM, "All")
+}
+
+record(fanout, "$(P)READ1") {
+	field(SCAN, "Passive")
+	field(LNK1, "$(P)AUTOTUNE PP")
+	field(LNK2, "$(P)SENSOR PP")
+	field(LNK3, "$(P)RBV PP")
+	field(LNK4, "$(P)SP:RBV PP")
+	field(LNK5, "$(P)HILIM PP")
+	field(LNK6, "$(P)LOWLIM PP")	
+	field(SELM, "All")
+}
+
+####
+
 record(ai, "$(P)OUTPUT") {
     info(INTEREST, "MEDIUM")
-    field(SCAN, "1 second")
     field(DESC, "Output Readback")
+    field(SCAN, "Passive")
     field(DTYP, "stream")
     field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),OP) $(PORT)")
     field(EGU, "%")
@@ -211,8 +238,8 @@ record(ai, "$(P)OUTPUT") {
 }
 
 record(ai, "$(P)MAX_OUTPUT") {
-    field(SCAN, "1 second")
     field(DESC, "Max Output Readback")
+	field(SCAN, "Passive")
     field(DTYP, "stream")
     field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),HO) $(PORT)")
     field(EGU, "%")
@@ -230,6 +257,7 @@ record(ao, "$(P)MAX_OUTPUT:SP") {
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:MAX_OUTPUT:SP")
     field(SDIS, "$(Q)DISABLE")
+	field(FLNK, "$(P)MAX_OUTPUT.PROC PP")
 }
 
 alias("$(P)MAX_OUTPUT", "$(P)MAX_OUTPUT:SP:RBV")
@@ -256,10 +284,10 @@ record(mbbi, "$(P)ERR") {
 
 record(ai, "$(P)P") {
     info(INTEREST, "MEDIUM")
-    field(SCAN, "1 second")
     field(DESC, "P Param Readback")
+	field(SCAN, "Passive")		
     field(DTYP, "stream")
-    field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),XP) $(PORT)")
+    field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),XP) $(PORT)")	
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:P")
     field(SDIS, "$(Q)DISABLE")
@@ -273,14 +301,15 @@ record(ao, "$(P)P:SP") {
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:P:SP")
     field(SDIS, "$(Q)DISABLE")
+	field(FLNK, "$(P)P.PROC")
 }
 
 alias("$(P)P", "$(P)P:SP:RBV")
 
 record(ai, "$(P)I") {
     info(INTEREST, "MEDIUM")
-    field(SCAN, "1 second")
     field(DESC, "I Param Readback")
+	field(SCAN, "Passive")
     field(DTYP, "stream")
     field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),TI) $(PORT)")
     field(SIML, "$(Q)SIM")
@@ -296,14 +325,15 @@ record(ao, "$(P)I:SP") {
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:I:SP")
     field(SDIS, "$(Q)DISABLE")
+	field(FLNK, "$(P)I.PROC")
 }
 
 alias("$(P)I", "$(P)I:SP:RBV")
 
 record(ai, "$(P)D") {
     info(INTEREST, "MEDIUM")
-    field(SCAN, "1 second")
-    field(DESC, "D Param Readback")
+	field(DESC, "D Param Readback")
+	field(SCAN, "Passive")
     field(DTYP, "stream")
     field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),TD) $(PORT)")
     field(SIML, "$(Q)SIM")
@@ -319,14 +349,15 @@ record(ao, "$(P)D:SP") {
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:D:SP")
     field(SDIS, "$(Q)DISABLE")
+	field(FLNK, "$(P)D.PROC")
 }
 
 alias("$(P)D", "$(P)D:SP:RBV")
 
 record(ai, "$(P)AUTOTUNE") {
-    field(SCAN, "1 second")
     field(DESC, "Autotune Readback")
     field(DTYP, "stream")
+    field(SCAN, "Passive")
     field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),AT) $(PORT)")
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:AUTOTUNE")
@@ -340,20 +371,22 @@ record(ao, "$(P)AUTOTUNE:SP") {
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:AUTOTUNE:SP")
     field(SDIS, "$(Q)DISABLE")
+	field(FLNK, "$(P)AUTOTUNE.PROC")
 }
 
 alias("$(P)AUTOTUNE", "$(P)AUTOTUNE:SP:RBV")
 
 record(ai, "$(P)SENSOR") {
     info(INTEREST, "MEDIUM")
-    field(SCAN, "1 second")
     field(DESC, "Sensor Readback")
+	field(SCAN, "Passive")
     field(DTYP, "stream")
     field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),PV) $(PORT)")
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:SENSOR")
     field(SDIS, "$(Q)DISABLE")
 	field(EGU, "")
+	
 }
 
 record(stringin, "$(P)CAL:SEL:RBV")
@@ -444,10 +477,10 @@ record(seq, "$(P)CAL:APPLY:UPDATE")
 
 record(cvt, "$(P)TEMP")
 {
+	field(SCAN, "1 second")
     field(DESC, "Temperature")
     info(INTEREST, "HIGH")
-	field(SCAN, "1 second")
-	field(INPY, "$(P)RBV PP")
+	field(INPY, "$(P)RBV")
 	field(METH, "1D TABLE INVERTED")
 	field(SPEC, "None.txt")
 	field(TDIR, "$(SDIR)")
@@ -492,22 +525,24 @@ record(cvt, "$(P)TEMP:SP:CONV")
 
 record(ai, "$(P)RBV") {
     info(INTEREST, "HIGH")
-    field(SCAN, "1 second")
     field(DESC, "Temperature Readback")
     field(DTYP, "stream")
+	field(SCAN, "Passive")
     field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),PV) $(PORT)")
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:TEMP")
     field(SDIS, "$(Q)DISABLE")
 	field(EGU, "")
+	field(FLNK, "$(P)TEMP.PROC PP")
 }
 
 record(ai, "$(P)SP:RBV") {
     info(INTEREST, "MEDIUM")
-    field(SCAN, "1 second")
     field(DESC, "Temperature Setpoint Readback")
+	field(SCAN, "Passive")
     field(DTYP, "stream")
     field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),SP) $(PORT)")
+	field(FLNK, "(P)HILIM.PROC")	
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:TEMP:SP:RBV")
     field(SDIS, "$(Q)DISABLE")
@@ -523,22 +558,24 @@ record(ao, "$(P)SP") {
     field(SIOL, "$(P)SIM:TEMP:SP")
     field(SDIS, "$(Q)DISABLE")
 	field(EGU, "")
+	field(FLNK, "$(P)SP:RBV.PROC PP")
 }
 
 record(ai, "$(P)HILIM") {
-    field(SCAN, "1 second")
     field(DESC, "Setpoint Highlimit Readback")
+	field(SCAN, "Passive")
     field(DTYP, "stream")
     field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),HS) $(PORT)")
+	field(FLNK, "(P)LOWLIM.PROC")
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:TEMP:HIGHLIMIT")
     field(SDIS, "$(Q)DISABLE")
 }
 
 record(ai, "$(P)LOWLIM") {
-    field(SCAN, "1 second")
     field(DESC, "Setpoint Lowlimit Readback")
-    field(DTYP, "stream")
+	field(SCAN, "Passive")    
+	field(DTYP, "stream")
     field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),LS) $(PORT)")
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:TEMP:LOWLIMIT")
