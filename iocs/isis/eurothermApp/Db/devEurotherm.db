@@ -27,8 +27,16 @@ record(ao, "$(P)TEMP:SP")
    field(DESC, "The temperature setpoint")
    field(DTYP, "asynFloat64")
    field(OUT, "@asyn($(READ),0,1)TGT")
+   field(FLNK, "$(P)OUT_SP")
    field(EGU, "K")
-   field(FLNK, "$(P)TEMP:SP:RBV")
+}
+
+record(ao, "$(P)TEMP:SP:RBV")
+{
+   field(DESC, "The temperature setpoint")
+   field(DTYP, "asynFloat64")
+   field(OUT, "@asyn($(READ),0,1)TGT:RBV")
+   field(EGU, "K")
 }
 
 record(ao, "$(P)RATE:SP")
@@ -102,7 +110,7 @@ record(ai, "$(P)OUT_SP")
    field(INP,  "@asyn($(READ),0,1)SP")
    field(PREC, "5")
    field(SCAN, "I/O Intr")
-   field(FLNK, "$(P)RAMP_SP")
+   field(FLNK, "$(P)RAMP_SP.PROC PP")
 }
 
 record(ai, "$(P)OUT_P")
@@ -148,9 +156,9 @@ record(ao, "$(P)RAMP_SP")
 {
     field(DTYP, "Soft Channel")
 	field(DOL, "$(P)OUT_SP")
+	field(FLNK, "$(P)TEMP:SP:CONV.PROC PP")	
 	field(OMSL, "closed_loop")
 	field(OIF, "Full")
-	field(FLNK, "$(P)TEMP:SP:CONV.PROC")
 }
 
 record(ao, "$(P)RAMP_P")
@@ -160,8 +168,6 @@ record(ao, "$(P)RAMP_P")
 	field(OMSL, "closed_loop")
 	field(OIF, "Full")
 	field(OUT, "$(P)P:SP PP")
-	field(DRVH, "100")
-	field(DRVL, "0")
 }
 
 record(ao, "$(P)RAMP_I")
@@ -171,8 +177,6 @@ record(ao, "$(P)RAMP_I")
 	field(OMSL, "closed_loop")
 	field(OIF, "Full")
 	field(OUT, "$(P)I:SP PP")
-	field(DRVH, "100")
-	field(DRVL, "0")
 }
 
 record(ao, "$(P)RAMP_D")
@@ -182,8 +186,6 @@ record(ao, "$(P)RAMP_D")
 	field(OMSL, "closed_loop")
 	field(OIF, "Full")
 	field(OUT, "$(P)D:SP PP")
-	field(DRVH, "100")
-	field(DRVL, "0")
 }
 
 record(ao, "$(P)RAMP_MAXOUT")
@@ -193,8 +195,6 @@ record(ao, "$(P)RAMP_MAXOUT")
 	field(OMSL, "closed_loop")
 	field(OIF, "Full")
 	field(OUT, "$(P)MAX_OUTPUT:SP PP")
-	field(DRVH, "100")
-	field(DRVL, "0")
 }
 
 ##################
@@ -386,7 +386,6 @@ record(ai, "$(P)SENSOR") {
     field(SIOL, "$(P)SIM:SENSOR")
     field(SDIS, "$(Q)DISABLE")
 	field(EGU, "")
-	
 }
 
 record(stringin, "$(P)CAL:SEL:RBV")
@@ -440,7 +439,7 @@ record(sseq, "$(P)CAL:SEL:UPDATE")
 	field(DOL1, "$(P)CAL:SEL.VAL")
 	field(LNK1, "$(P)TEMP.NSPE")
 	field(DOL2, "$(P)CAL:SEL")
-	field(LNK2, "$(P)TEMP:SP:RBV.NSPE")
+	field(LNK2, "$(P)TEMP:SP:RBV:CONV.NSPE")
 	field(DOL3, "$(P)CAL:SEL")
 	field(LNK3, "$(P)TEMP:HIGHLIMIT.NSPE")
 	field(DOL4, "$(P)CAL:SEL")
@@ -463,7 +462,7 @@ record(seq, "$(P)CAL:APPLY:UPDATE")
 	field(DOL1, "$(P)CAL:APPLY")
 	field(LNK1, "$(P)TEMP.INIT NPP")
 	field(DOL2, "$(P)CAL:APPLY")
-	field(LNK2, "$(P)TEMP:SP:RBV.INIT NPP")
+	field(LNK2, "$(P)TEMP:SP:RBV:CONV.INIT NPP")
 	field(DOL3, "$(P)CAL:APPLY")
 	field(LNK3, "$(P)TEMP:HIGHLIMIT.INIT NPP")
 	field(DOL4, "$(P)CAL:APPLY")
@@ -487,10 +486,11 @@ record(cvt, "$(P)TEMP")
 	field(FLNK, "$(P)CURRENT_TEMP PP")
 }
 
-record(cvt, "$(P)TEMP:SP:RBV")
+record(cvt, "$(P)TEMP:SP:RBV:CONV")
 {
 	field(SCAN, "1 second")
 	field(INPY, "$(P)SP:RBV PP")
+	field(OUT, "$(P)TEMP:SP:RBV PP")
 	field(METH, "1D TABLE INVERTED")
 	field(SPEC, "None.txt")
 	field(TDIR, "$(SDIR)")
@@ -542,7 +542,6 @@ record(ai, "$(P)SP:RBV") {
 	field(SCAN, "Passive")
     field(DTYP, "stream")
     field(INP, "@eurotherm2k.proto read($(GAD),$(LAD),SP) $(PORT)")
-	field(FLNK, "(P)HILIM.PROC")	
     field(SIML, "$(Q)SIM")
     field(SIOL, "$(P)SIM:TEMP:SP:RBV")
     field(SDIS, "$(Q)DISABLE")
