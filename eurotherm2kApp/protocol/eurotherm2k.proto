@@ -1,7 +1,8 @@
 ## \file
 ## Stream Device Protocol for eurotherm 2000 series EI Bisynch
-## \param GAD = First char of address, e.g. address = 1, GAD = 0, address = 12, GAD = 1
-## \param LAD = Second char of address, e.g. address = 1, LAD = 1, address = 12, LAD = 2
+## will look for the records \$1SPLIT_ADD.A which contains GAD, \$1SPLIT_ADD.B which contains the LAD and \$1ERR which will process any errors
+## GAD = First char of address, e.g. address = 1, GAD = 0, address = 12, GAD = 1
+## LAD = Second char of address, e.g. address = 1, LAD = 1, address = 12, LAD = 2
 
 locktimeout = 5000;
 
@@ -23,14 +24,13 @@ extrainput   = Ignore;
 ## send: [EOT](GAD)(GAD)(LAD)(LAD)(CHAN)(C1)(C2)[ENQ]
 ## reply: [STX](CHAN)(C1)(C2)<DATA>[ETX](BCC)
 ## \endcode
-## - $1 = GAD
-## - $2 = LAD
-## - $3 = command mnemonic
+## - $1 = PV PREFIX
+## - $2 = command mnemonic
 #############################################################################
-read { InTerminator = "\x03"; out "\x04\$1\$1\$2\$2\$3\x05"; in "\x02\$3%f"; }
+read { InTerminator = "\x03"; out "\x04%(\$1SPLIT_ADD.A)1i%(\$1SPLIT_ADD.A)1i%(\$1SPLIT_ADD.B)1i%(\$1SPLIT_ADD.B)1i\$2\x05"; in "\x02\$2%f"; }
 
 ## Read value, but in hex
-readhex { InTerminator = "\x03"; out "\x04\$1\$1\$2\$2\$3\x05"; in "\x02\$3>%x"; }
+readhex { InTerminator = "\x03"; out "\x04%(\$1SPLIT_ADD.A)1i%(\$1SPLIT_ADD.A)1i%(\$1SPLIT_ADD.B)1i%(\$1SPLIT_ADD.B)1i\$2\x05"; in "\x02\$2>%x"; }
 
 ## NOTE: we rely on readtimeout for the in commands. 
 ## Could use maxInput, but that screws up record initialisation (once inTerminator is set it can't be overwritten in the \@init handler)
@@ -40,12 +40,10 @@ readhex { InTerminator = "\x03"; out "\x04\$1\$1\$2\$2\$3\x05"; in "\x02\$3>%x";
 ## send: [EOT](GAD)(GAD)(LAD)(LAD)[STX](CHAN)(C1)(C2)<DATA>[ETX](BCC)
 ## reply: [ACK] or [NAK], discarded as no terminator
 ## \endcode
-## - $1 = GAD
-## - $2 = LAD
-## - $3 = command mnemonic
-## - $4 = device prefix, \$(P)\$(Q)
+## - $1 = device prefix, \$(P)
+## - $2 = command mnemonic
 #############################################################################
-write {  InTerminator = ""; out "\x04\$1\$1\$2\$2\x02\$3%f\x03%6<xor>"; in "\x06"; @init{ read; }; @mismatch{ in "%(\$4ERR.PROC)r"; }; }
+write {  InTerminator = ""; out "\x04%(\$1SPLIT_ADD.A)1i%(\$1SPLIT_ADD.A)1i%(\$1SPLIT_ADD.B)1i%(\$1SPLIT_ADD.B)1i\x02\$2%f\x03%6<xor>"; in "\x06"; @init{ read; }; @mismatch{ in "%(\$1ERR.PROC)r"; }; }
 
 ## Write a value in int rather than float
-writeint {  InTerminator = ""; out "\x04\$1\$1\$2\$2\x02\$3%i\x03%6<xor>"; in "\x06"; @init{ read; }; @mismatch{ in "%(\$4ERR.PROC)r"; }; }
+writeint {  InTerminator = ""; out "\x04%(\$1SPLIT_ADD.A)1i%(\$1SPLIT_ADD.A)1i%(\$1SPLIT_ADD.B)1i%(\$1SPLIT_ADD.B)1i\x02\$2%i\x03%6<xor>"; in "\x06"; @init{ read; }; @mismatch{ in "%(\$1ERR.PROC)r"; }; }
