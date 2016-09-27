@@ -27,7 +27,7 @@ extrainput   = Ignore;
 ## - $1 = PV PREFIX
 ## - $2 = command mnemonic
 #############################################################################
-read { InTerminator = "\x03"; out "\x04%(\$1SPLIT_ADD.A)1i%(\$1SPLIT_ADD.A)1i%(\$1SPLIT_ADD.B)1i%(\$1SPLIT_ADD.B)1i\$2\x05"; in "\x02\$2%f"; }
+read { InTerminator = "\x03"; out "\x04%(\$1SPLIT_ADD.A)1i%(\$1SPLIT_ADD.A)1i%(\$1SPLIT_ADD.B)1i%(\$1SPLIT_ADD.B)1i\$2\x05"; in "%*[\x18\x02]\$2%f"; }
 
 ## Read value, but in hex
 readhex { InTerminator = "\x03"; out "\x04%(\$1SPLIT_ADD.A)1i%(\$1SPLIT_ADD.A)1i%(\$1SPLIT_ADD.B)1i%(\$1SPLIT_ADD.B)1i\$2\x05"; in "\x02\$2>%x"; }
