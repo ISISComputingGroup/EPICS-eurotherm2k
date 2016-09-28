@@ -1,16 +1,12 @@
 ## \file
 ## Stream Device Protocol for eurotherm 2000 series EI Bisynch
-## will look for the records \$1SPLIT_ADD.A which contains GAD, \$1SPLIT_ADD.B which contains the LAD and \$1ERR which will process any errors
-## GAD = First char of address, e.g. address = 1, GAD = 0, address = 12, GAD = 1
-## LAD = Second char of address, e.g. address = 1, LAD = 1, address = 12, LAD = 2
+## will look for the record \$1ERR which will process any errors
 
 locktimeout = 5000;
 
-## Unfortunately, this is designed with a checksum terminator.
 OutTerminator   = "";
 replytimeout = 200;
-## Setting a small readtimeout means that we can get data without needing a terminator
-readtimeout  = 100;
+readtimeout  = 200;
 extrainput   = Ignore;
 
 #STX = "\x02"
@@ -24,17 +20,16 @@ extrainput   = Ignore;
 ## send: [EOT](GAD)(GAD)(LAD)(LAD)(CHAN)(C1)(C2)[ENQ]
 ## reply: [STX](CHAN)(C1)(C2)<DATA>[ETX](BCC)
 ## \endcode
-## - $1 = PV PREFIX
+## - $1 = device prefix, \$(P)
 ## - $2 = command mnemonic
+## - $3 = GAD = First char of address, e.g. address = 1, GAD = 0, address = 12, GAD = 1
+## - $4 = LAD = Second char of address, e.g. address = 1, LAD = 1, address = 12, LAD = 2
 #############################################################################
-read { InTerminator = "\x03"; out "\x04%(\$1SPLIT_ADD.A)1i%(\$1SPLIT_ADD.A)1i%(\$1SPLIT_ADD.B)1i%(\$1SPLIT_ADD.B)1i\$2\x05"; in "%*[\x18\x02]\$2%f"; }
+read { InTerminator = ""; out "\x04\$3\$3\$4\$4\$2\x05"; in "\x02\$2%f\x03%*c"; }
 
 ## Read value, but in hex
-readhex { InTerminator = "\x03"; out "\x04%(\$1SPLIT_ADD.A)1i%(\$1SPLIT_ADD.A)1i%(\$1SPLIT_ADD.B)1i%(\$1SPLIT_ADD.B)1i\$2\x05"; in "\x02\$2>%x"; }
+readhex { InTerminator = ""; out "\x04\$3\$3\$4\$4\$2\x05"; in "\x02\$2>%x\x03%*c"; }
 
-## NOTE: we rely on readtimeout for the in commands. 
-## Could use maxInput, but that screws up record initialisation (once inTerminator is set it can't be overwritten in the \@init handler)
-##
 ## Write value
 ## \code
 ## send: [EOT](GAD)(GAD)(LAD)(LAD)[STX](CHAN)(C1)(C2)<DATA>[ETX](BCC)
@@ -42,8 +37,11 @@ readhex { InTerminator = "\x03"; out "\x04%(\$1SPLIT_ADD.A)1i%(\$1SPLIT_ADD.A)1i
 ## \endcode
 ## - $1 = device prefix, \$(P)
 ## - $2 = command mnemonic
+## - $3 = GAD = First char of address, e.g. address = 1, GAD = 0, address = 12, GAD = 1
+## - $4 = LAD = Second char of address, e.g. address = 1, LAD = 1, address = 12, LAD = 2
+
 #############################################################################
-write {  InTerminator = ""; out "\x04%(\$1SPLIT_ADD.A)1i%(\$1SPLIT_ADD.A)1i%(\$1SPLIT_ADD.B)1i%(\$1SPLIT_ADD.B)1i\x02\$2%f\x03%6<xor>"; in "\x06"; @init{ read; }; @mismatch{ in "%(\$1ERR.PROC)r"; }; }
+write {  InTerminator = ""; out "\x04\$3\$3\$4\$4\x02\$2%f\x03%6<xor>"; in "\x06"; @init{ read; }; @mismatch{ in "%(\$1ERR.PROC)r"; }; }
 
 ## Write a value in int rather than float
-writeint {  InTerminator = ""; out "\x04%(\$1SPLIT_ADD.A)1i%(\$1SPLIT_ADD.A)1i%(\$1SPLIT_ADD.B)1i%(\$1SPLIT_ADD.B)1i\x02\$2%i\x03%6<xor>"; in "\x06"; @init{ read; }; @mismatch{ in "%(\$1ERR.PROC)r"; }; }
+writeint {  InTerminator = ""; out "\x04\$3\$3\$4\$4\x02\$2%i\x03%6<xor>"; in "\x06"; @init{ read; }; @mismatch{ in "%(\$1ERR.PROC)r"; }; }
