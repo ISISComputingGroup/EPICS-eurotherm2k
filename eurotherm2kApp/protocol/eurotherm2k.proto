@@ -38,14 +38,14 @@ waittime = 20;
 ##   either read as part of the next read (hence the regex for a random character) or is got rid of as part 
 ##   of the buffer flush done by stream. The eurotherm will not respond if it is still writting the last character (BCC)
 ##   to the buffer so we wait for a small amount of time to allow it to finish writting this character (without this there are may time out warnings)
-read_once {out "\x04\$3\$3\$4\$4\$2\x05"; in "%*/.?\x02/\$2%f"; wait $waittime;}
+read_once  {out "\x04\$3\$3\$4\$4\$2\x05"; in "%*/.?\x02/\$2%f"; wait $waittime;}
 readhex_once  {out "\x04\$3\$3\$4\$4\$2\x05"; in "%*/.?\x02/\$2>%x"; wait $waittime;}
 
 ## read the value (if it times out re read it)
 read { InTerminator = "\x03"; read_once; @readtimeout { read_once; } }
 
 ## Read value, but in hex (if it times out re read it)
-readhex { InTerminator = "\x03"; readhex_once; @readtimeout { read_hex_once; }}
+readhex { InTerminator = "\x03"; readhex_once; @readtimeout { readhex_once; } }
 
 
 ## Write value
