@@ -37,7 +37,7 @@ waittime = 20;
 ##   this means there is an extra BCC character left in the buffer this is 
 ##   either read as part of the next read (hence the regex for a random character) or is got rid of as part 
 ##   of the buffer flush done by stream. The eurotherm will not respond if it is still writting the last character (BCC)
-##   to the buffer so we wait for a small amount of time to allow it to finish writting this character (without this there are may time out warnings)
+##   to the buffer so we wait for a small amount of time to allow it to finish writing this character (without this there are may time out warnings)
 read_once  {out "\x04\$3\$3\$4\$4\$2\x05"; in "%*/.?\x02/\$2%f"; wait $waittime;}
 readhex_once  {out "\x04\$3\$3\$4\$4\$2\x05"; in "%*/.?\x02/\$2>%x"; wait $waittime;}
 
@@ -63,7 +63,7 @@ readhex { InTerminator = "\x03"; readhex_once; @readtimeout { readhex_once; } }
 ##   because it is a write so get back both the \x03 and BCC
 read_error { out "\x04\$3\$3\$4\$4EE\x05"; in "%*/.?\x02/EE>%(\$1ERR)x\x03%*c"; } 
 
-## read the value on init, because it is part of read there is no terminator character so get back both the \x03 and BCC
+## read the value on init, because it is part of write there is no terminator character so get back both the \x03 and BCC
 ##  no need for regex on beinging since everything is read correctly
 read_init     { InTerminator = ""; out "\x04\$3\$3\$4\$4\$2\x05";  in "\x02\$2%f\x03%*c";}
 read_init_int { InTerminator = ""; out "\x04\$3\$3\$4\$4\$2\x05";  in "\x02\$2%i\x03%*c";}
