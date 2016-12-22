@@ -72,7 +72,7 @@ read_init_int { InTerminator = ""; out "\x04\$3\$3\$4\$4\$2\x05";  in "\x02\$2%i
 ## on an error (e.g. NAK mismatches ACK) read the error code immediately from the device
 write {
     InTerminator = ""; 
-	out "\x04\$3\$3\$4\$4\x02\$2%.2f\x03%6<xor>"; 
+	out "\x04\$3\$3\$4\$4\x02\$2%#.3f\x03%6<xor>"; 
 	in "\x06";
 	@init{ read_init; }; 
 	@mismatch{ read_error; }; 
