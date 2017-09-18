@@ -4,8 +4,6 @@
 
 locktimeout = 5000;
 
-OutTerminator   = "";
-
 # Uses a timeout when there is no termination character (i.e. for reads)
 replytimeout = 200;
 readtimeout  = 100;
