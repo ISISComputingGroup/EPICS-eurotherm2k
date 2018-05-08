@@ -1,3 +1,9 @@
+ASUBFUNCTIONS=$(SUPPORT)/asubFunctions/master
+ASYN=$(SUPPORT)/asyn/master
+ONCRPC=$(SUPPORT)/oncrpc/master
+SNCSEQ=$(SUPPORT)/seq/master
+UTILITIES=$(SUPPORT)/utilities/master
+
 # optional extra local definitions here
 -include $(TOP)/configure/RELEASE.private
 
