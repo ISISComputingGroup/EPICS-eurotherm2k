@@ -17,6 +17,9 @@
 #include "get_units.h"
 
 
+/**
+ * Gets the units of a file from that file.
+ */
 std::string get_units_from_file(std::string filepath) 
 {
     std::string units_prefix = "# units:";
@@ -41,14 +44,21 @@ std::string get_units_from_file(std::string filepath)
 }
 
 
-std::string str_from_epics(void* rec)
+/**
+ * Extracts a std::string from an epics aSubRecord.
+ */
+std::string str_from_epics(void* raw_rec)
 {
+    epicsOldString* rec = reinterpret_cast<epicsOldString*>(raw_rec);
     char buffer[sizeof(epicsOldString)+1];  // +1 for null terminator in the case where epics str is exactly 40 chars (unterminated)
     buffer[sizeof(epicsOldString)] = '\0';
-    return std::string(strncpy(buffer, *((epicsOldString*)(rec)), sizeof(epicsOldString)));
+    return std::string(strncpy(buffer, *rec, sizeof(epicsOldString)));
 }
 
 
+/**
+ * Extracts data from the aSub record, gets the units of the file and puts the units back into the record.
+ */
 int get_units_impl(aSubRecord *prec)
 {
     std::string base_dir = str_from_epics(prec->a);
@@ -57,6 +67,6 @@ int get_units_impl(aSubRecord *prec)
     
     std::string units = get_units_from_file(base_dir + "/" + sensor_dir + "/" + sensor_file);
     
-    strcpy(*(epicsOldString*) prec->vala, units.c_str());
+    strcpy(*reinterpret_cast<epicsOldString*>(prec->vala), units.c_str());
     return 0;
 }
