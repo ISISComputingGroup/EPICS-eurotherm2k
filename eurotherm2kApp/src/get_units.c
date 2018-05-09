@@ -8,7 +8,7 @@
 /**
  *  Get the units from the calibration file.
  */
-const char* get_units(aSubRecord *prec) 
+int get_units(aSubRecord *prec) 
 {
 	return get_units_impl(prec);	
 }
