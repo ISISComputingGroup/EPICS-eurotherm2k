@@ -1,5 +1,13 @@
-# ISIS calibration v1.0
-# {"units": "K"}
+# ISIS calibration
+# {
+#    "sensor_type": "K-type",
+#    "format_version": "1",
+#    "conversion_date": "2018/06/07",
+#    "column1_name": "Temperature",
+#    "column1_units": "K",
+#    "column2_name": "Voltage",
+#    "column2_units": "mV"
+# }
 1.20927230303971000000,1.50736314598516000000
 1.29965829974167000000,1.52132663750615000000
 1.40140216241767000000,1.53731669735489000000
