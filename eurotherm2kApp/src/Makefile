@@ -1,24 +1,15 @@
 TOP=../..
-
 include $(TOP)/configure/CONFIG
+#=======================================
 
-# -------------------------------
-# Build an Diamond Support Module
-# -------------------------------
+LIBRARY_IOC += EurothermSup
 
-#LIBRARY_IOC += xxx
+# EurothermSup_DBD += asyn.dbd
+# EurothermSup_DBD += utilities.dbd
 
-# xxxRecord.h will be created from xxxRecord.dbd
-#DBDINC += xxx.h
+EurothermSup_LIBS += $(EPICS_BASE_IOC_LIBS)
+EurothermSup_LIBS += asyn utilities
+EurothermSup_LIBS += asubFunctions
 
-# xxxRecord.dbd will be installed into <top>/dbd
-#DBD += xxx.dbd
-
-# The following are compiled and added to the support library
-#xxx_SRCS += xxxCodeA.c
-#xxx_SRCS += xxxCodeB.c
-
-# We need to link against the EPICS Base libraries
-#xxx_LIBS += $(EPICS_BASE_IOC_LIBS)
-
+#=======================================
 include $(TOP)/configure/RULES
