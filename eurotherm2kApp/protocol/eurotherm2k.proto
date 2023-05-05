@@ -2,10 +2,10 @@
 ## Stream Device Protocol for eurotherm 2000 series EI Bisynch
 ## will look for the record \$1ERR which will process any errors
 
-locktimeout = 5000;
+locktimeout = 10000;
 
 # Uses a timeout when there is no termination character (i.e. for reads)
-replytimeout = 200;
+replytimeout = 2000;
 readtimeout  = 100;
 extrainput   = Error;
 
