@@ -7,6 +7,7 @@ locktimeout = 10000;
 # Uses a timeout when there is no termination character (i.e. for reads)
 replytimeout = 2000;
 readtimeout  = 100;
+PollPeriod   = 200;
 extrainput   = Error;
 
 # time to wait after read (see below)
