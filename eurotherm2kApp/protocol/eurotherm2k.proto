@@ -39,6 +39,7 @@ waittime = 20;
 ##   to the buffer so we wait for a small amount of time to allow it to finish writing this character (without this there are may time out warnings)
 read_once  {out "\x04\$3\$3\$4\$4\$2\x05"; in "%*/.?\x02/\$2%#f"; wait $waittime;}
 readhex_once  {out "\x04\$3\$3\$4\$4\$2\x05"; in "%*/.?\x02/\$2>%x"; wait $waittime;}
+readint_once  {out "\x04\$3\$3\$4\$4\$2\x05"; in "%*/.?\x02/\$2%i"; wait $waittime;}
 
 ## read the value (if it times out re read it)
 read { InTerminator = "\x03"; read_once; @readtimeout { read_once; } }
@@ -46,6 +47,8 @@ read { InTerminator = "\x03"; read_once; @readtimeout { read_once; } }
 ## Read value, but in hex (if it times out re read it)
 readhex { InTerminator = "\x03"; readhex_once; @readtimeout { readhex_once; } }
 
+## read the value as an integer (if it times out re read it)
+readint { InTerminator = "\x03"; readint_once; @readtimeout { readint_once; } }
 
 ## Write value
 ## \code
